@@ -1,10 +1,4 @@
-#define COL_1 4
-#define COL_2 5
-#define ROW_1 6
-#define ROW_2 7
-#define ROW_3 8
-#define ROW_4 9
-
+// Keyboard.h
 
 void setupKeyboard(){
   pinMode(COL_1, OUTPUT);
@@ -17,12 +11,13 @@ void setupKeyboard(){
 
 uint8_t _countKeyboard = 0;
 
-int readKeyboard(){
+uint8_t readKeyboard(){
 
   uint8_t sel = (_countKeyboard % 2)*4; 
   
   digitalWrite(COL_1, !sel);
   digitalWrite(COL_2, sel);
+
 
   if(!digitalRead(ROW_1)){
     return 1 + (sel);  
@@ -42,5 +37,5 @@ int readKeyboard(){
 
   _countKeyboard++;
 
-  return -1;
+  return 0;
 }
