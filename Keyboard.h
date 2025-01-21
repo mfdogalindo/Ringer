@@ -15,8 +15,8 @@ uint8_t readKeyboard(){
 
   uint8_t sel = (_countKeyboard % 2)*4; 
   
-  digitalWrite(COL_1, !sel);
-  digitalWrite(COL_2, sel);
+  digitalWrite(COL_1, sel);
+  digitalWrite(COL_2, !sel);
 
 
   if(!digitalRead(ROW_1)){

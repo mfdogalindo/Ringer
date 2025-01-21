@@ -9,19 +9,10 @@
 #define ROW_3 A2
 #define ROW_4 A3
 
-#define A201 2
-#define A202 3
-#define A301 4
-#define A302 5
-#define A401 6
-#define A402 7
-#define A501 8
-#define A502 9
-
 #define LOOP_DELAY 100
 #define SETUP_LIMIT 50
 #define MAX_POSITIONS 8
-#define SETUP_TIMEOUT 120000
+#define SETUP_TIMEOUT 20000
 
 #include "Keyboard.h"
 #include "Melody.h"
@@ -32,7 +23,7 @@ ConfigMelody configMelody;
 
 
 void setup() {
-  Serial.begin(9600); // Inicializar comunicación Serial
+  Serial.begin(115200); // Inicializar comunicación Serial
   Serial.println("Starting");
   ringer.setup();
   setupKeyboard();
@@ -63,6 +54,10 @@ void setupLoop(uint32_t startTime, uint8_t user) {
 
     // En caso de superar limite de tiempo sin completar la configuración, retorna al loop principal
     if (currentTime - startTime > SETUP_TIMEOUT) {
+      ringer.stop();
+      ringer.cancel();
+      ringer.cancel();
+      ringer.cancel();
       return;
     }
 
@@ -71,6 +66,7 @@ void setupLoop(uint32_t startTime, uint8_t user) {
       uint8_t pressedKey = readKeyboard();
 
       if (pressedKey > 0) {
+        startTime = currentTime;
         Serial.print("Tecla: ");
         Serial.println(pressedKey);
       }
@@ -88,7 +84,7 @@ void setupLoop(uint32_t startTime, uint8_t user) {
       }
 
       if (pressedKey == 1) {
-        configMelody.update(user, currentOption, ringer.whatIsPlaying()->nombre);
+        configMelody.update(user, currentOption, ringer.whatIsPlaying()->name);
         ringer.stop();
         ringer.confirmation();
         ringer.confirmation();
@@ -117,8 +113,12 @@ void loop() {
 
   timeReference = millis();
 
+
   if (timeReference - lastUpdate > LOOP_DELAY) {
     lastUpdate = timeReference;
+    if (ringer.getIsPlaying()) {
+      return;
+    }
     uint8_t pressedKey = readKeyboard();
     uint8_t user = lastKb - 1;
 

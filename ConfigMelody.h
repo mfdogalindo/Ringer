@@ -12,10 +12,10 @@ class ConfigMelody {
     }
 
     uint8_t get(uint8_t position) {
-        Serial.print("Search value: ");
-        Serial.print(position);
-        Serial.print(" Result: ");
-        Serial.println(melodiesSelected[position]);
+      Serial.print("Search value: ");
+      Serial.print(position);
+      Serial.print(" Result: ");
+      Serial.println(melodiesSelected[position]);
 
       return melodiesSelected[position];
     }
@@ -31,7 +31,7 @@ class ConfigMelody {
 
     void refresh() {
       for (uint8_t i = 0; i < MAX_POSITIONS; i++) {
-        uint8_t curr= EEPROM.read(i);
+        uint8_t curr = EEPROM.read(i);
         curr = curr > AVAILABLE_MELODIES ? 0 : curr;
         melodiesSelected[i] = curr;
       }
@@ -43,12 +43,8 @@ class ConfigMelody {
       Serial.print(name);
       Serial.print("for user: ");
       Serial.println(position);
-      melodiesSelected[position]=value;
+      melodiesSelected[position] = value;
       print();
     }
-
-
-
-
 
 };
